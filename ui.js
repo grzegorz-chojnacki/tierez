@@ -60,39 +60,37 @@ function createTray(state) {
   return state.tray.node
 }
 
-function createUI() {
+function renderUI() {
   state = loadState()
 
   const tierlist = document.getElementById('tierlist')
   const tray = document.getElementById('tray')
   if (!tierlist || !tray) throw new Error()
 
-  async function paste() {
-    const clipboardContents = await navigator.clipboard.read()
-    for (const item of clipboardContents) {
-      if (!item.types.includes('image/png')) return
-
-      const blob = await item.getType('image/png')
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      // TODO: display a loading indicator for loading big images
-      reader.onloadend = async () => {
-        const item = {
-          // TODO: fix this mess
-          data: await compressImage(/** @type {string} */(reader.result)),
-          node: /** @type {HTMLImageElement} */(/** @type {unknown} */(null))
-        }
-
-        item.node = createImage(item)
-        state.tray.items.push(item)
-        state.tray.node.appendChild(item.node)
-        saveState(state)
-      }
-    }
-  }
-
   tierlist.replaceChildren(...createTierlist(state))
   tray.replaceChildren(createTray(state))
-
-  document.addEventListener('paste', paste)
 }
+
+document.addEventListener('paste', async () => {
+  const clipboardContents = await navigator.clipboard.read()
+  for (const item of clipboardContents) {
+    if (!item.types.includes('image/png')) return
+
+    const blob = await item.getType('image/png')
+    const reader = new FileReader()
+    reader.readAsDataURL(blob)
+    // TODO: display a loading indicator for loading big images
+    reader.onloadend = async () => {
+      const item = {
+        // TODO: fix this mess
+        data: await compressImage(/** @type {string} */(reader.result)),
+        node: /** @type {HTMLImageElement} */(/** @type {unknown} */(null))
+      }
+
+      item.node = createImage(item)
+      state.tray.items.push(item)
+      state.tray.node.appendChild(item.node)
+      saveState(state)
+    }
+  }
+})

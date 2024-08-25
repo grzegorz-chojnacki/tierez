@@ -27,4 +27,4 @@ const TIER_HEIGHT = 87
 
 /** @type {State} */
 let state
-createUI()
+renderUI()

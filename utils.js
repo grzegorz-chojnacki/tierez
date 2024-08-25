@@ -77,6 +77,11 @@ function drop(e) {
   state.dragged = null
 }
 
+function resetState() {
+  localStorage.clear()
+  renderUI()
+}
+
 /** @param {State} state */
 function saveState(state) {
   localStorage.setItem('state', JSON.stringify(state))
