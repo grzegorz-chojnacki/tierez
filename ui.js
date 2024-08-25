@@ -17,49 +17,26 @@ function createImage(item) {
  * @returns {HTMLDivElement}
  */
 function createTier(tier) {
-  const tierNode = document.createElement('div')
-  tierNode.classList.add('tier')
+  const container = document.createElement('div')
+  container.classList.add('tier')
 
   if (tier.name && tier.color) {
-    const labelNode = tierNode.appendChild(document.createElement('label'))
+    const labelNode = container.appendChild(document.createElement('label'))
     labelNode.innerText = tier.name
     labelNode.style.backgroundColor = tier.color
   }
+  const itemsNode = container.appendChild(document.createElement('div'))
+  itemsNode.classList.add('items')
+  tier.node = itemsNode
 
   for (let item of tier.items) {
-    item.node = tierNode.appendChild(createImage(item))
+    item.node = itemsNode.appendChild(createImage(item))
   }
 
-  tierNode.addEventListener('dragover', e => e.preventDefault())
-  tierNode.addEventListener('drop', drop)
+  itemsNode.addEventListener('dragover', e => e.preventDefault())
+  itemsNode.addEventListener('drop', drop)
 
-  return tierNode
-}
-
-/**
- * @param {State} state
- * @returns {HTMLElement[]}
- */
-function createTierlist(state) {
-  return state.tierlist.map(tier => {
-    tier.node = createTier(tier)
-    return tier.node
-  })
-}
-
-/**
- * @param {State} state
- * @returns {HTMLDivElement}
- */
-function createTray(state) {
-  state.tray.node = createTier({
-    name: '',
-    color: '',
-    // TODO: fix this mess
-    node: /** @type {HTMLImageElement} */(/** @type {unknown} */(null)),
-    items: state.tray.items
-  })
-  return state.tray.node
+  return container
 }
 
 function renderUI() {
@@ -69,8 +46,8 @@ function renderUI() {
   const tray = document.getElementById('tray')
   if (!tierlist || !tray) throw new Error()
 
-  tierlist.replaceChildren(...createTierlist(state))
-  tray.replaceChildren(createTray(state))
+  tierlist.replaceChildren(...state.tierlist.map(tier => createTier(tier)))
+  tray.replaceChildren(createTier(state.tray))
 }
 
 // TODO: Add handling of files

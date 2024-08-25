@@ -2,7 +2,7 @@
   --bg:   hsl(345, 12%, 5%);
   --bg-2: hsl(345, 17%, 9%);
   --fg: #bbb;
-  --row-height: 100px;
+  --row-height: 85px;
 
   --S: #e01c19;
   --A: #e96432;
@@ -26,12 +26,12 @@ body {
   font-family: sans-serif;
   background-color: var(--bg);
   color: var(--fg);
-  padding: 1rem;
-  margin: 0;
+  margin: 1rem;
+  min-width: min-content;
 }
 
 header {
-  padding: 1em 0;
+  margin: 0 0 1em;
 }
 
 button {
@@ -60,29 +60,33 @@ button:active {
   background-color: var(--bg-2);
   border-radius: 5px;
   overflow: hidden;
-  height: var(--row-height);
-  gap: 1em;
+  min-height: var(--row-height);
+  gap: 10px;
   margin: 5px 0;
 }
 
 .tier>label {
   user-select: none;
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
   border-radius: 5px;
   width: 2ch;
   flex-shrink: 0;
   color: var(--bg);
   font-size: 4rem;
-  text-align: center;
 }
 
-#tray>.tier {
+.items {
+  width: 100%;
+  display: flex;
   flex-wrap: wrap;
+  gap: 5px;
 }
 
 img {
   border-radius: 5px;
-  flex-shrink: 1;
   max-height: var(--row-height);
   object-fit: scale-down;
   cursor: grab;
@@ -98,7 +102,7 @@ img:active {
 }
 
 hr {
-  margin: 2em;
+  margin: 1em;
   border-style: solid;
   border-width: 3px;
   border-color: var(--bg-2);

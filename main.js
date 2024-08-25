@@ -23,7 +23,7 @@
  */
 
 // TODO: get rid of global variables
-const TIER_HEIGHT = 87
+const TIER_HEIGHT = 85
 
 /** @type {State} */
 let state
