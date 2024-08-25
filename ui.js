@@ -20,9 +20,11 @@ function createTier(tier) {
   const tierNode = document.createElement('div')
   tierNode.classList.add('tier')
 
-  const labelNode = tierNode.appendChild(document.createElement('label'))
-  labelNode.innerText = tier.name
-  labelNode.style.backgroundColor = tier.color
+  if (tier.name && tier.color) {
+    const labelNode = tierNode.appendChild(document.createElement('label'))
+    labelNode.innerText = tier.name
+    labelNode.style.backgroundColor = tier.color
+  }
 
   for (let item of tier.items) {
     item.node = tierNode.appendChild(createImage(item))
@@ -51,8 +53,8 @@ function createTierlist(state) {
  */
 function createTray(state) {
   state.tray.node = createTier({
-    name: ' ',
-    color: 'transparent',
+    name: '',
+    color: '',
     // TODO: fix this mess
     node: /** @type {HTMLImageElement} */(/** @type {unknown} */(null)),
     items: state.tray.items
