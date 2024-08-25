@@ -1,0 +1,72 @@
+:root {
+  --bg: #212;
+  --bg-2: #424;
+  --fg: #bbb;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 16px;
+  font-family: sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  padding: 1rem;
+  margin: 0;
+}
+
+#tierlist {
+  background-color: black;
+  padding: 1px 0;
+}
+
+.tier::before {
+  display: inline-block;
+  width: 2ch;
+  flex-shrink: 0;
+  color: var(--bg);
+  font-size: 4rem;
+  text-align: center;
+}
+
+.tier {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: var(--bg);
+  height: 87px;
+  gap: 1em;
+  margin: 5px;
+}
+
+img {
+  flex-shrink: 1;
+  height: 87px;
+  max-width: 100%;
+  object-fit: scale-down;
+  cursor: grab;
+}
+
+img:active {
+  cursor: grabbing;
+}
+
+#tier-S::before { content: "S"; background: #e04; }
+#tier-A::before { content: "A"; background: #f74; }
+#tier-B::before { content: "B"; background: #fd3; }
+#tier-C::before { content: "C"; background: #3e5; }
+#tier-D::before { content: "D"; background: #1af; }
+#tier-E::before { content: "E"; background: #64f; }
+#tier-F::before { content: "F"; background: #f4b; }
+
+hr {
+  margin: 2em;
+  border-style: solid;
+  border-width: 3px;
+  border-color: var(--bg-2);
+}
