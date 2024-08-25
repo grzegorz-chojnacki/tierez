@@ -4,8 +4,6 @@ function spawnImage(image) {
   const img = document.createElement('img')
   img.addEventListener('dragstart', dragstart)
 
-  console.log(image)
-
   img.src = image
   tray.appendChild(img)
 }
@@ -34,6 +32,7 @@ async function paste() {
     reader.readAsDataURL(blob)
     reader.onloadend = () => {
       spawnImage(reader.result)
+      saveState()
     }
   }
 }
@@ -47,7 +46,6 @@ function saveState() {
   if (imgs.length > 0) {
     const images = [...imgs].map(img => img.src)
 
-    localStorage.clear()
     localStorage.setItem('images', JSON.stringify(images))
   }
 }
