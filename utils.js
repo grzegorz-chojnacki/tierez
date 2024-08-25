@@ -1,3 +1,5 @@
+// TODO: get rid of global variables
+const TIER_HEIGHT = 87
 let dragged = undefined
 
 function spawnImage(image) {
@@ -6,6 +8,29 @@ function spawnImage(image) {
 
   img.src = image
   tray.appendChild(img)
+}
+
+async function compressImage(image) {
+  const img = new Image()
+  img.src = image
+
+  // We need to wait for browser to load the image
+  return new Promise(resolve => {
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+
+      // Match aspect ratio between canvas and image
+      // Make it double for sharpness
+      canvas.width = img.width * (TIER_HEIGHT / img.height) * 2
+      canvas.height = TIER_HEIGHT * 2
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      const result = canvas.toDataURL('image/jpeg', 0.8)
+
+      resolve(result)
+    }
+  })
 }
 
 ////////////////////
@@ -30,8 +55,9 @@ async function paste() {
     const blob = await item.getType('image/png')
     const reader = new FileReader()
     reader.readAsDataURL(blob)
-    reader.onloadend = () => {
-      spawnImage(reader.result)
+    // TODO: display a loading indicator for loading big images
+    reader.onloadend = async () => {
+      spawnImage(await compressImage(reader.result))
       saveState()
     }
   }
