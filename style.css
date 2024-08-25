@@ -63,6 +63,8 @@ button:active { filter: brightness(0.8); }
   text-align: center;
 }
 
+#tray > .tier { flex-wrap: wrap; }
+
 img {
   border-radius: 5px;
   flex-shrink: 1;
