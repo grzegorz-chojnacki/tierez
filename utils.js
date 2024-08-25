@@ -78,6 +78,16 @@ function drop(e) {
 }
 
 function resetState() {
+  for (let tier of state.tierlist) {
+    state.tray.items.push(...tier.items)
+    tier.items.splice(0, tier.items.length)
+  }
+
+  saveState(state)
+  renderUI()
+}
+
+function clearState() {
   localStorage.clear()
   renderUI()
 }
