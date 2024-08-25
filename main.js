@@ -1,13 +1,30 @@
-'use strict'
+// @ts-check
+/// <reference path="paths.js" />
 
-const tray = document.getElementById('tray').firstElementChild
+/**
+ * @typedef Item
+ * @property {HTMLImageElement} node
+ * @property {String} data
+ */
 
-// Drop targets
-document.querySelectorAll('.tier').forEach(box => {
-  box.addEventListener('dragover', e => e.preventDefault())
-  box.addEventListener('drop', drop)
-})
+/**
+ * @typedef Tier
+ * @property {String} name
+ * @property {String} color
+ * @property {Item[]} items
+ * @property {HTMLDivElement} node
+ */
 
-document.addEventListener('paste', paste)
+/**
+ * @typedef State
+ * @property {Tier[]} tierlist
+ * @property {Tier} tray
+ * @property {Item?} dragged
+ */
 
-loadState()
+// TODO: get rid of global variables
+const TIER_HEIGHT = 87
+
+/** @type {State} */
+let state
+createUI()

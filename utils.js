@@ -1,87 +1,99 @@
-// TODO: get rid of global variables
-const TIER_HEIGHT = 87
-let dragged = undefined
+// @ts-check
+/// <reference path="paths.js" />
 
-function spawnImage(image) {
-  const img = document.createElement('img')
-  img.addEventListener('dragstart', dragstart)
-
-  img.src = image
-  tray.appendChild(img)
+/**
+ * @template T
+ * @param {Array<T>} arr
+ * @param {T} item
+ * @returns {T | null}
+ */
+function remove(arr, item) {
+  const index = arr.indexOf(item);
+  if (index > -1) {
+    arr.splice(index, 1);
+    return item;
+  }
+  return null;
 }
 
-async function compressImage(image) {
+/**
+ * @param {String} imageData
+ * @returns {Promise<String>}
+ */
+async function compressImage(imageData) {
   const img = new Image()
-  img.src = image
+  img.src = imageData
 
   // We need to wait for browser to load the image
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     img.onload = () => {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
 
-      // Match aspect ratio between canvas and image
-      // Make it double for sharpness
-      canvas.width = img.width * (TIER_HEIGHT / img.height) * 2
-      canvas.height = TIER_HEIGHT * 2
+      if (ctx) {
+        // Match aspect ratio between canvas and image
+        // Make it double for sharpness
+        canvas.width = img.width * (TIER_HEIGHT / img.height) * 2
+        canvas.height = TIER_HEIGHT * 2
 
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      const result = canvas.toDataURL('image/jpeg', 0.8)
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        const result = canvas.toDataURL('image/jpeg', 0.8)
 
-      resolve(result)
+        resolve(result)
+      } else {
+        reject('canvas ctx is null')
+      }
     }
   })
 }
 
-////////////////////
-// Event handlers //
-////////////////////
-function dragstart(e) {
-  dragged = e.target
+/**
+ * @param {HTMLElement?} node
+ * @returns {Tier?}
+ */
+function findItems(node) {
+  for (let tier of state.tierlist) {
+    if (tier.node === node) return tier
+  }
+  if (state.tray.node === node) return state.tray
+  else return null
 }
 
+/** @param {DragEvent} e */
 function drop(e) {
-  if (e.target.classList.contains('tier')) {
-    e.target.appendChild(dragged)
-  }
-  dragged = undefined
-}
+  if (state.dragged && (e.target instanceof HTMLElement)) {
+    if (!state.dragged.node.parentElement) throw new Error()
+    const sourceTier = findItems(state.dragged.node.parentElement)
+    const targetTier = findItems(e.target)
 
-async function paste() {
-  const clipboardContents = await navigator.clipboard.read()
-  for (const item of clipboardContents) {
-    if (!item.types.includes('image/png')) return
+    if (sourceTier && targetTier) {
+      remove(sourceTier.items, state.dragged)
+      targetTier.items.push(state.dragged)
 
-    const blob = await item.getType('image/png')
-    const reader = new FileReader()
-    reader.readAsDataURL(blob)
-    // TODO: display a loading indicator for loading big images
-    reader.onloadend = async () => {
-      spawnImage(await compressImage(reader.result))
-      saveState()
+      saveState(state)
+      e.target.appendChild(state.dragged.node)
     }
   }
+  state.dragged = null
 }
 
-///////////////////////////
-// LocalStorage handlers //
-///////////////////////////
-function saveState() {
-  const imgs = document.querySelectorAll('img')
-
-  if (imgs.length > 0) {
-    const images = [...imgs].map(img => img.src)
-
-    localStorage.setItem('images', JSON.stringify(images))
-  }
+/** @param {State} state */
+function saveState(state) {
+  localStorage.setItem('state', JSON.stringify(state))
 }
 
+/** @returns {State} */
 function loadState() {
-  const images = JSON.parse(localStorage.getItem('images'))
-
-  if (images) {
-    for (let image of images) {
-      spawnImage(image)
-    }
+  return JSON.parse(localStorage.getItem('state') || 'null') || {
+    tierlist: [
+      { name: 'S', color: '#e04', node: null, items: [] },
+      { name: 'A', color: '#f74', node: null, items: [] },
+      { name: 'B', color: '#fd3', node: null, items: [] },
+      { name: 'C', color: '#3e5', node: null, items: [] },
+      { name: 'D', color: '#1af', node: null, items: [] },
+      { name: 'E', color: '#64f', node: null, items: [] },
+      { name: 'F', color: '#f4b', node: null, items: [] },
+    ],
+    tray: { node: null, items: [] }
   }
 }
