@@ -101,13 +101,13 @@ function saveState(state) {
 function loadState() {
   return JSON.parse(localStorage.getItem('state') || 'null') || {
     tierlist: [
-      { name: 'S', color: '#e04', node: null, items: [] },
-      { name: 'A', color: '#f74', node: null, items: [] },
-      { name: 'B', color: '#fd3', node: null, items: [] },
-      { name: 'C', color: '#3e5', node: null, items: [] },
-      { name: 'D', color: '#1af', node: null, items: [] },
-      { name: 'E', color: '#64f', node: null, items: [] },
-      { name: 'F', color: '#f4b', node: null, items: [] },
+      { name: 'S', color: 'var(--S)', node: null, items: [] },
+      { name: 'A', color: 'var(--A)', node: null, items: [] },
+      { name: 'B', color: 'var(--B)', node: null, items: [] },
+      { name: 'C', color: 'var(--C)', node: null, items: [] },
+      { name: 'D', color: 'var(--D)', node: null, items: [] },
+      { name: 'E', color: 'var(--E)', node: null, items: [] },
+      { name: 'F', color: 'var(--F)', node: null, items: [] },
     ],
     tray: { node: null, items: [] }
   }

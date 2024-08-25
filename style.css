@@ -1,8 +1,16 @@
 :root {
-  --bg:   #0f0a0c;
-  --bg-2: #1b0f12;
-  --fg:   #bbb;
+  --bg:   hsl(345, 12%, 5%);
+  --bg-2: hsl(345, 17%, 9%);
+  --fg: #bbb;
   --row-height: 100px;
+
+  --S: #e01c19;
+  --A: #e96432;
+  --B: #ffb93b;
+  --C: #1cb254;
+  --D: #00a5fd;
+  --E: #5625d2;
+  --F: #9825d2;
 }
 
 *,
@@ -38,8 +46,13 @@ button {
   cursor: pointer;
 }
 
-button:hover  { filter: brightness(1.2); }
-button:active { filter: brightness(0.8); }
+button:hover {
+  filter: brightness(1.2);
+}
+
+button:active {
+  filter: brightness(0.8);
+}
 
 .tier {
   display: flex;
@@ -52,7 +65,7 @@ button:active { filter: brightness(0.8); }
   margin: 5px 0;
 }
 
-.tier > label {
+.tier>label {
   user-select: none;
   display: inline-block;
   border-radius: 5px;
@@ -63,7 +76,9 @@ button:active { filter: brightness(0.8); }
   text-align: center;
 }
 
-#tray > .tier { flex-wrap: wrap; }
+#tray>.tier {
+  flex-wrap: wrap;
+}
 
 img {
   border-radius: 5px;
@@ -73,7 +88,10 @@ img {
   cursor: grab;
 }
 
-img:hover { filter: brightness(1.2); }
+img:hover {
+  filter: brightness(1.2);
+}
+
 img:active {
   filter: opacity(0.5);
   cursor: grabbing;
