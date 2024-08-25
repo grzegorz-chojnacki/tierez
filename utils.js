@@ -1,6 +1,18 @@
 let dragged = undefined
 
-// Event handlers
+function spawnImage(image) {
+  const img = document.createElement('img')
+  img.addEventListener('dragstart', dragstart)
+
+  console.log(image)
+
+  img.src = image
+  tray.appendChild(img)
+}
+
+////////////////////
+// Event handlers //
+////////////////////
 function dragstart(e) {
   dragged = e.target
 }
@@ -18,14 +30,34 @@ async function paste() {
     if (!item.types.includes('image/png')) return
 
     const blob = await item.getType('image/png')
-    spawnImage(blob)
+    const reader = new FileReader()
+    reader.readAsDataURL(blob)
+    reader.onloadend = () => {
+      spawnImage(reader.result)
+    }
   }
 }
 
-function spawnImage(blob) {
-  const image = document.createElement('img')
-  image.addEventListener('dragstart', dragstart)
-  image.src = URL.createObjectURL(blob)
+///////////////////////////
+// LocalStorage handlers //
+///////////////////////////
+function saveState() {
+  const imgs = document.querySelectorAll('img')
 
-  tray.appendChild(image)
+  if (imgs.length > 0) {
+    const images = [...imgs].map(img => img.src)
+
+    localStorage.clear()
+    localStorage.setItem('images', JSON.stringify(images))
+  }
+}
+
+function loadState() {
+  const images = JSON.parse(localStorage.getItem('images'))
+
+  if (images) {
+    for (let image of images) {
+      spawnImage(image)
+    }
+  }
 }
