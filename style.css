@@ -35,6 +35,8 @@ body {
 
 header {
   margin: 0 0 1em;
+  display: flex;
+  gap: 0.5em;
 }
 
 button {
@@ -55,6 +57,29 @@ button:hover {
 
 button:active {
   filter: brightness(0.8);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+#trash {
+  flex-grow: 2;
+  border: 3px dashed var(--bg-3);
+  border-radius: 3px;
+  line-height: 100%;
+}
+
+#trash::before {
+  content: "Trash";
+  font-size: 1.5em;
+  color: var(--bg-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 0 1em;
 }
 
 .tier {

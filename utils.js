@@ -77,6 +77,22 @@ function drop(e) {
   state.dragged = null
 }
 
+/** @param {DragEvent} e */
+function dropTrash(e) {
+  console.log(e)
+  if (state.dragged) {
+    if (!state.dragged.node.parentElement) throw new Error()
+    const sourceTier = findItems(state.dragged.node.parentElement)
+
+    if (sourceTier) {
+      remove(sourceTier.items, state.dragged)
+      saveState(state)
+      state.dragged.node.remove()
+    }
+  }
+  state.dragged = null
+}
+
 function resetState() {
   for (let tier of state.tierlist) {
     state.tray.items.push(...tier.items)

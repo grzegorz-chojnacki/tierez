@@ -44,13 +44,16 @@ function renderUI() {
 
   const tierlist = document.getElementById('tierlist')
   const tray = document.getElementById('tray')
-  if (!tierlist || !tray) throw new Error()
+  const trash = document.getElementById('trash')
+  if (!tierlist || !tray || !trash) throw new Error()
 
   tierlist.replaceChildren(...state.tierlist.map(tier => createTier(tier)))
   tray.replaceChildren(createTier(state.tray))
+
+  trash.addEventListener('dragover', e => e.preventDefault())
+  trash.addEventListener('drop', dropTrash)
 }
 
-// TODO: Add handling of files
 document.addEventListener('paste', async () => {
   const clipboardItems = await navigator.clipboard.read()
   for (const item of clipboardItems) {
