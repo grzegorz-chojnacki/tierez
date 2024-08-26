@@ -8,12 +8,12 @@
  * @returns {T | null}
  */
 function remove(arr, item) {
-  const index = arr.indexOf(item);
+  const index = arr.indexOf(item)
   if (index > -1) {
-    arr.splice(index, 1);
-    return item;
+    arr.splice(index, 1)
+    return item
   }
-  return null;
+  return null
 }
 
 /**
@@ -45,6 +45,26 @@ async function compressImage(imageData) {
       }
     }
   })
+}
+
+/** @param {Blob} blob */
+async function handleClipboardImage(blob) {
+  // TODO: Rewrite to use ObjectURLs in img src
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  // TODO: display a loading indicator for loading big images
+  reader.onloadend = async () => {
+    // TODO: fix this mess
+    const item = {
+      data: await compressImage(/** @type {string} */(reader.result)),
+      node: /** @type {HTMLImageElement} */(/** @type {unknown} */(null))
+    }
+
+    item.node = createImage(item)
+    state.tray.items.push(item)
+    state.tray.node.appendChild(item.node)
+    saveState(state)
+  }
 }
 
 /**

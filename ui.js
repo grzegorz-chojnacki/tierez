@@ -56,26 +56,11 @@ function renderUI() {
 
 document.addEventListener('paste', async () => {
   const clipboardItems = await navigator.clipboard.read()
-  for (const item of clipboardItems) {
+  for (let item of clipboardItems) {
     for (let type of item.types) {
       if (type.startsWith('image/')) {
-        // TODO: Rewrite to use ObjectURLs in img src
         const blob = await item.getType(type)
-        const reader = new FileReader()
-        reader.readAsDataURL(blob)
-        // TODO: display a loading indicator for loading big images
-        reader.onloadend = async () => {
-          // TODO: fix this mess
-          const item = {
-            data: await compressImage(/** @type {string} */(reader.result)),
-            node: /** @type {HTMLImageElement} */(/** @type {unknown} */(null))
-          }
-
-          item.node = createImage(item)
-          state.tray.items.push(item)
-          state.tray.node.appendChild(item.node)
-          saveState(state)
-        }
+        await handleClipboardImage(blob)
       }
     }
   }
