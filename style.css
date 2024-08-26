@@ -39,6 +39,10 @@ header {
   gap: 0.5em;
 }
 
+main {
+  margin: 1em 0 2em;
+}
+
 button {
   user-select: none;
   padding: 1em;
@@ -88,15 +92,26 @@ button:active {
   color: #661e1e;
 }
 
+#tray {
+  color: var(--bg-3);
+  border: 2px dashed;
+  border-radius: 2px;
+}
+
 .tier {
   display: flex;
   flex-wrap: nowrap;
-  border-radius: 5px;
   overflow: hidden;
-  background-color: var(--bg-2);
-  min-height: var(--row-height);
   gap: 10px;
-  margin: 5px 0;
+  margin-top: 2px;
+  padding-top: 2px;
+  border-top: 2px solid var(--bg-3);
+}
+
+.tier:last-child {
+  margin-bottom: 2px;
+  padding-bottom: 2px;
+  border-bottom: 2px solid var(--bg-3);
 }
 
 .tier>label {
@@ -117,7 +132,8 @@ button:active {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  background-color: inherit;
+  background-color: var(--bg);
+  min-height: var(--row-height);
   transition: filter 0.2s cubic-bezier(0, 0, 0, 1);
 }
 
@@ -138,12 +154,5 @@ img:active {
 }
 
 .hover {
-  filter: brightness(1.2);
-}
-
-hr {
-  margin: 1em;
-  border-style: solid;
-  border-width: 3px;
-  border-color: var(--bg-2);
+  filter: brightness(1.3);
 }

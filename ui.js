@@ -25,7 +25,17 @@ function createTier(tier) {
     labelNode.innerText = tier.name
     labelNode.style.backgroundColor = tier.color
   }
-  const itemsNode = container.appendChild(document.createElement('div'))
+
+  container.appendChild(createItems(tier))
+  return container
+}
+
+/**
+ * @param {Tier} tier
+ * @returns {HTMLDivElement}
+ */
+function createItems(tier) {
+  const itemsNode = document.createElement('div')
   itemsNode.classList.add('items')
   tier.node = itemsNode
 
@@ -37,7 +47,7 @@ function createTier(tier) {
   itemsNode.addEventListener('dragover', dragoverHandler)
   itemsNode.addEventListener('drop', drop)
 
-  return container
+  return itemsNode
 }
 
 /** @param {DragEvent} e */
@@ -64,7 +74,7 @@ function renderUI() {
   if (!tierlist || !tray || !trash) throw new Error()
 
   tierlist.replaceChildren(...state.tierlist.map(tier => createTier(tier)))
-  tray.replaceChildren(createTier(state.tray))
+  tray.replaceChildren(createItems(state.tray))
 
   trash.addEventListener('dragleave', dragleaveHandler)
   trash.addEventListener('dragover', dragoverHandler)
