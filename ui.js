@@ -33,10 +33,26 @@ function createTier(tier) {
     item.node = itemsNode.appendChild(createImage(item))
   }
 
-  itemsNode.addEventListener('dragover', e => e.preventDefault())
+  itemsNode.addEventListener('dragleave', dragleaveHandler)
+  itemsNode.addEventListener('dragover', dragoverHandler)
   itemsNode.addEventListener('drop', drop)
 
   return container
+}
+
+/** @param {DragEvent} e */
+function dragoverHandler(e) {
+  e.preventDefault()
+  if (e.target && e.target instanceof HTMLElement) {
+    e.target.classList.add('hover')
+  }
+}
+
+/** @param {DragEvent} e */
+function dragleaveHandler(e) {
+  if (e.target && e.target instanceof HTMLElement) {
+    e.target.classList.remove('hover')
+  }
 }
 
 function renderUI() {
@@ -50,18 +66,25 @@ function renderUI() {
   tierlist.replaceChildren(...state.tierlist.map(tier => createTier(tier)))
   tray.replaceChildren(createTier(state.tray))
 
-  trash.addEventListener('dragover', e => e.preventDefault())
+  trash.addEventListener('dragleave', dragleaveHandler)
+  trash.addEventListener('dragover', dragoverHandler)
   trash.addEventListener('drop', dropTrash)
-}
 
-document.addEventListener('paste', async () => {
-  const clipboardItems = await navigator.clipboard.read()
-  for (let item of clipboardItems) {
-    for (let type of item.types) {
-      if (type.startsWith('image/')) {
-        const blob = await item.getType(type)
-        await handleClipboardImage(blob)
+  document.addEventListener('dragend', () => {
+    for (let element of document.getElementsByClassName('hover')) {
+      element.classList.remove('hover')
+    }
+  })
+
+  document.addEventListener('paste', async () => {
+    const clipboardItems = await navigator.clipboard.read()
+    for (let item of clipboardItems) {
+      for (let type of item.types) {
+        if (type.startsWith('image/')) {
+          const blob = await item.getType(type)
+          await handleClipboardImage(blob)
+        }
       }
     }
-  }
-})
+  })
+}
