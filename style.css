@@ -65,21 +65,27 @@ button:active {
 
 #trash {
   flex-grow: 2;
-  border: 3px dashed var(--bg-3);
-  border-radius: 3px;
+  color: var(--bg-3);
+  border: 2px dashed;
+  border-radius: 2px;
   line-height: 100%;
+  transition: color 0.4s ease-out;
 }
 
 #trash::before {
   content: "Trash";
   font-size: 1.5em;
-  color: var(--bg-4);
+  color: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
   padding: 0 1em;
+}
+
+#trash.active {
+  color: #661e1e;
 }
 
 .tier {
@@ -112,6 +118,7 @@ button:active {
   flex-wrap: wrap;
   gap: 5px;
   background-color: inherit;
+  transition: filter 0.2s cubic-bezier(0, 0, 0, 1);
 }
 
 img {

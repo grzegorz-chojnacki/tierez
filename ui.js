@@ -70,10 +70,15 @@ function renderUI() {
   trash.addEventListener('dragover', dragoverHandler)
   trash.addEventListener('drop', dropTrash)
 
+  document.addEventListener('dragstart', () => {
+    trash.classList.add('active')
+  })
+
   document.addEventListener('dragend', () => {
     for (let element of document.getElementsByClassName('hover')) {
       element.classList.remove('hover')
     }
+    trash.classList.remove('active')
   })
 
   document.addEventListener('paste', async () => {
