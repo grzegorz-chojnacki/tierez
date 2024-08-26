@@ -8,6 +8,7 @@
 function createImage(item) {
   const img = document.createElement('img')
   img.src = item.data
+  img.draggable = true
   img.addEventListener('dragstart', () => { state.dragged = item })
   return img
 }

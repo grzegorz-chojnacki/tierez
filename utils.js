@@ -99,7 +99,6 @@ function drop(e) {
 
 /** @param {DragEvent} e */
 function dropTrash(e) {
-  console.log(e)
   if (state.dragged) {
     if (!state.dragged.node.parentElement) throw new Error()
     const sourceTier = findItems(state.dragged.node.parentElement)
@@ -108,6 +107,9 @@ function dropTrash(e) {
       remove(sourceTier.items, state.dragged)
       saveState(state)
       state.dragged.node.remove()
+      // The `dragend` event won't emit after we remove the element,
+      // so we will emit it ourselves
+      document.dispatchEvent(new DragEvent('dragend'))
     }
   }
   state.dragged = null
